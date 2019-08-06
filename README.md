@@ -11,12 +11,6 @@
 
 * `gherkin-table-formatter.alignment`: left/right Alignment used when formatting a table
 
-## Release Notes
-
-### 1.0.0
-
-Make it works
-
 -----------------------------------------------------------------------------------------------------------
 
 **Enjoy!**

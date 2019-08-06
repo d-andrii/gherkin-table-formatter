@@ -1,9 +1,12 @@
 # Change Log
 
-All notable changes to the "gherkin-table-formatter" extension will be documented in this file.
+## [1.0.1] - 2019-08-06
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### Added
+- Added `Generate Gherkin Table From Selection` command.
+### Fixed
+- Minor fixes
 
-## [Unreleased]
+## [1.0.0] - 2019-08-05
 
-- Initial release
+- Make it works
