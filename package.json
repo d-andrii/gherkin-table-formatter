@@ -14,7 +14,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.formatGherkinTable"
+		"onCommand:extension.formatGherkinTable",
+		"onCommand:extension.generateGherkinTableFromSelection"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -22,12 +23,16 @@
 			{
 				"command": "extension.formatGherkinTable",
 				"title": "Format Gherkin Table"
+			},  {
+				"command": "extension.generateGherkinTableFromSelection",
+				"title": "Generate Gherkin Table From Selection"
 			}
 		],
 		"menus": {
-			"editor/context": [{
-				"command": "extension.formatGherkinTable"
-			}]
+			"editor/context": [
+				{ "command": "extension.formatGherkinTable" },
+				{ "command": "extension.generateGherkinTableFromSelection" }
+			]
 		},
 		"configuration": {
 			"title": "Gherkin Table Formatter",

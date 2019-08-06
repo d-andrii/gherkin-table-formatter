@@ -7,20 +7,23 @@ export function activate(context: vscode.ExtensionContext) {
 		if (editor) {
 			const document = editor.document;
 			const selection = editor.selection;
-			const alignment: string = vscode.workspace.getConfiguration('gherkin-table-formatter').get('alignment') || 'left';
+			const alignment: 'left' | 'right' = vscode.workspace.getConfiguration('gherkin-table-formatter').get('alignment') || 'left';
 
 			const text = document.getText(selection);
 			let lines = text.split('\n');
 			const charsInColumns: number[] = [];
-			const indents = [];
+			const indents: string[] = [];
 
 			const matchFirstLine = lines[0].match(/^\s+/);
 			indents[0] = matchFirstLine === null ? '' : matchFirstLine[0];
 			const matchSecondLine = lines[1].match(/^\s+/);
-			indents[1] = matchSecondLine === null ? '' : matchSecondLine[0];
+			indents[1] = matchSecondLine === null ? indents[0] : matchSecondLine[0];
 
 			lines = lines.map((line) => line.trim());
 			lines = lines.map((line) => {
+				if (!(/^\|.*\|$/.test(line))) {
+					return line;
+				}
 				let columns = line.split('|');
 				columns = columns
 					.filter((item) => item.trim())
@@ -31,11 +34,17 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 					return column;
 				});
-				return columns.join('|');
+				return '|' + columns.join('|') + '|';
 			});
 
 			lines = lines.map((line) => {
+				if (!(/^\|.*\|$/.test(line))) {
+					return line;
+				}
 				let columns = line.split('|');
+				columns = columns
+					.filter((item) => item.trim())
+					.map((item) => item.trim());
 				columns = columns.map((column, index) => {
 					const length = column.length;
 					if (length < charsInColumns[index]) {
@@ -59,7 +68,51 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(disposable);
+	const generate = vscode.commands.registerCommand('extension.generateGherkinTableFromSelection', () => {
+		const editor = vscode.window.activeTextEditor;
+		if (editor) {
+			const document = editor.document;
+			const selection = editor.selection;
+
+			const text = document.getText(selection);
+			let lines = text.split('\n');
+			const charsInColumns: number[] = [];
+			let indent = '';
+
+			const matchFirstLine = lines[0].match(/^\s+/);
+			indent = matchFirstLine === null ? '' : matchFirstLine[0];
+			const matchSecondLine = lines[1].match(/^\s+/);
+			indent = matchSecondLine === null ? indent : matchSecondLine[0];
+
+			lines.forEach((line) => {
+				if (!(/^\s*\|.*\|\s*$/.test(line))) {
+					return;
+				}
+				let columns = line.split('|');
+				columns = columns
+					.filter((item) => item.trim());
+				columns.forEach((column, index) => {
+					if (charsInColumns[index] === undefined || column.length > charsInColumns[index]) {
+						charsInColumns[index] = column.length;
+					}
+				});
+			});
+
+			const result = charsInColumns.map((count) => ' '.repeat(count));
+			console.log(result.join('|'));
+			lines = lines.map((line) => {
+				if (line.trim() === '') {
+					return indent + '|' + result.join('|') + '|';
+				} else {
+					return line;
+				}
+			});
+			editor.edit((builder) => {
+				builder.replace(selection, lines.join('\n'));
+			});
+		}
+	});
+	context.subscriptions.push(disposable, generate);
 }
 
 export function deactivate() {}
