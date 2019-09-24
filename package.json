@@ -2,7 +2,7 @@
 	"name": "gherkin-table-formatter",
 	"displayName": "Gherkin Table Formatter",
 	"description": "",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"repository": {
 		"url": "https://github.com/d-andrii/gherkin-table-formatter.git"
 	},
@@ -23,7 +23,8 @@
 			{
 				"command": "extension.formatGherkinTable",
 				"title": "Format Gherkin Table"
-			}, {
+			},
+			{
 				"command": "extension.generateGherkinTableFromSelection",
 				"title": "Generate Gherkin Table From Selection"
 			}
@@ -33,7 +34,8 @@
 				{
 					"command": "extension.formatGherkinTable",
 					"when": "editorLangId == feature"
-				}, {
+				},
+				{
 					"command": "extension.generateGherkinTableFromSelection",
 					"when": "editorLangId == feature"
 				}
@@ -46,7 +48,10 @@
 					"type": "string",
 					"default": "left",
 					"description": "Alignment used when formatting a table",
-					"enum": ["left", "right"]
+					"enum": [
+						"left",
+						"right"
+					]
 				}
 			}
 		}
