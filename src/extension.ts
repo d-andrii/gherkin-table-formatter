@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 				let columns = line.split('|');
 				columns = columns
-					.filter((item) => item.trim())
+					.slice(1, columns.length - 1)
 					.map((item) => item.trim());
 				columns = columns.map((column, index) => {
 					if (charsInColumns[index] === undefined || column.length > charsInColumns[index]) {
@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 				let columns = line.split('|');
 				columns = columns
-					.filter((item) => item.trim())
+					.slice(1, columns.length - 1)
 					.map((item) => item.trim());
 				columns = columns.map((column, index) => {
 					const length = column.length;
@@ -90,7 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 				let columns = line.split('|');
 				columns = columns
-					.filter((item) => item.trim());
+					.slice(1, columns.length - 1);
 				columns.forEach((column, index) => {
 					if (charsInColumns[index] === undefined || column.length > charsInColumns[index]) {
 						charsInColumns[index] = column.length;
@@ -99,7 +99,6 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 
 			const result = charsInColumns.map((count) => ' '.repeat(count));
-			console.log(result.join('|'));
 			lines = lines.map((line) => {
 				if (line.trim() === '') {
 					return indent + '|' + result.join('|') + '|';
